@@ -9,16 +9,12 @@ stages:
     jobs:
       - job: "build"
         steps:
-         - task: UsePythonVersion@0
-           inputs:
-             versionSpec: '3.x'
-             githubToken: false
-             architecture: 'x64'
+        
          - script: |
-             python -m pip install --upgrade pip setuptools wheel
+              python -m pip install --upgrade pip setuptools wheel
            displayName: 'pip installed'
          - script: |
-             python -m venv .venv
+             python3.9 -m venv .venv
               . .venv/bin/activate
               pip install -r requirements.txt
               FLASK_APP=run.py flask run
