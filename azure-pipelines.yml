@@ -7,9 +7,6 @@ pool:
 steps:
 # activating virtual environment
 
-- script: python -m venv .venv
-  displayName: 'create virtual environment'
-
 - script: |
     pip install -r requirements.txt
     FLASK_APP=run.py flask run
