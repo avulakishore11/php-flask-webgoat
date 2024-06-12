@@ -9,20 +9,23 @@ stages:
     jobs:
       - job: "build"
         steps:
-        
          - script: |
-               # Download get-pip.py to install pip
-                curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+              sudo apt-get update
+              sudo apt-get install -y python3.9 python3.9-venv python3.9-distutils curl
 
-                # Install pip for Python 3.9
-                python3.9 get-pip.py
+              # Download get-pip.py to install pip
+              curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
 
-                # Upgrade pip, setuptools, and wheel
-                python3.9 -m pip install --upgrade pip setuptools wheel
-           displayName: 'pip installed'
+              # Install pip for Python 3.9
+              python3.9 get-pip.py
+
+              # Upgrade pip, setuptools, and wheel
+              python3.9 -m pip install --upgrade pip setuptools wheel
+           displayName: 'Install Python and pip'
+           
          - script: |
-                sudo apt install python3.9 -m venv .venv
-                . .venv/bin/activate
-                pip install -r requirements.txt
-                FLASK_APP=run.py flask run
-           displayName: 'build finished'  
+              python3.9 -m venv .venv
+              . .venv/bin/activate
+              pip install -r requirements.txt
+              FLASK_APP=run.py flask run
+           displayName: 'Set up virtual environment and run Flask app'
