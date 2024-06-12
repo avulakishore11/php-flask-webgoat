@@ -1,10 +1,8 @@
-#pyhton-pool
-
 trigger:
 - main
 
 pool:
-  name: 'pyhton-pool'
+ name: 'python-pool'
 
 steps:
 - script: |
@@ -16,14 +14,16 @@ steps:
 
 - script: |
     . .venv/bin/activate
-    FLASK_APP=run.py flask run &
-    sleep 10  # Wait for Flask app to start
+    FLASK_APP=run.py flask run --host=0.0.0.0 &
+    sleep 20  # Wait for Flask app to start
+    netstat -tuln  # Check listening ports for debugging
   displayName: 'Start Flask application'
 
 - script: |
-    curl -b cookie.txt -d'username=admin&password=admin' localhost:5000/login
-    curl -c cookie.txt localhost:5000/grep_processes?name=kworker
-    curl -c cookie.txt "localhost:5000/grep_processes?name=xxx%20%26%26%20touch%20%2Ftmp%2Fpwnd"
+    . .venv/bin/activate
+    curl -b cookie.txt -d'username=admin&password=admin' http://localhost:5000/login
+    curl -c cookie.txt http://localhost:5000/grep_processes?name=kworker
+    curl -c cookie.txt "http://localhost:5000/grep_processes?name=xxx%20%26%26%20touch%20%2Ftmp%2Fpwnd"
   displayName: 'Run basic tests'
 
 - script: |
