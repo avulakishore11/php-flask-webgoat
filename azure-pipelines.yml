@@ -4,14 +4,18 @@ trigger:
 pool:
   name: 'pyhton-pool'
 
-steps:
-# activating virtual environment
-
-- script: |
-    pip install -r requirements.txt
-    FLASK_APP=run.py flask run
-
-- script: |
-    . .venv/bin/activate
-    flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
-  displayName: 'Run flake8 for linting'
+stages:
+  - stage: 'build_stage'
+    jobs:
+      - job: "build"
+        steps:
+         - task: UsePythonVersion@0
+           inputs:
+             versionSpec: '3.x'
+             architecture: 'x64'
+         - script: |
+             python -m pip install --upgrade pip setuptools wheel
+           displayName: 'pip installed'
+         - script: |
+             pip install -r requirements.txt
+           displayName: 'build finished'  
