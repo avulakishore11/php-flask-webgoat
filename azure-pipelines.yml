@@ -5,10 +5,6 @@ pool:
   name: 'pyhton-pool'
 
 steps:
-- task: UsePythonVersion@0
-  inputs:
-    versionSpec: '3.x'
-    addToPath: true
 
 - script: |
     python -m venv .venv
