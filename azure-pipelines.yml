@@ -11,7 +11,7 @@ stages:
         steps:
         
          - script: |
-              python -m pip install --upgrade pip setuptools wheel
+              python3.9 -m pip install --upgrade pip setuptools wheel
            displayName: 'pip installed'
          - script: |
              python3.9 -m venv .venv
