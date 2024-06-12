@@ -2,9 +2,14 @@ trigger:
 - main
 
 pool:
- name: 'pyhton-pool'
+  name: 'pyhton-pool'
 
 steps:
+- task: UsePythonVersion@0
+  inputs:
+    versionSpec: '3.x'
+    addToPath: true
+
 - script: |
     python -m venv .venv
     . .venv/bin/activate
@@ -16,7 +21,7 @@ steps:
     . .venv/bin/activate
     FLASK_APP=run.py flask run --host=0.0.0.0 &
     sleep 20  # Wait for Flask app to start
-    netstat -tuln  # Check listening ports for debugging
+    /bin/netstat -tuln  # Check listening ports for debugging
   displayName: 'Start Flask application'
 
 - script: |
