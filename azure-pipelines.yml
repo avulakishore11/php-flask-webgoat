@@ -17,5 +17,15 @@ steps:
   displayName: 'Install dependencies'
 
 - script: |
+   python - m  pip install flake8
+   flake8
+  displayName: 'installed flake8' 
+
+- script: |
     pytest
   displayName: 'pytest'
+
+- script: |
+   pip install tox
+   tox -e py
+  displayName: 'tox installed' 
