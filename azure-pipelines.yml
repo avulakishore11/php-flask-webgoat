@@ -21,7 +21,7 @@ stages:
                 python3.9 -m pip install --upgrade pip setuptools wheel
            displayName: 'pip installed'
          - script: |
-                python3.9 -m venv .venv
+                sudo apt install python3.9 -m venv .venv
                 . .venv/bin/activate
                 pip install -r requirements.txt
                 FLASK_APP=run.py flask run
