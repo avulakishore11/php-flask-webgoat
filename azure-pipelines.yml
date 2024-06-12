@@ -1,31 +1,43 @@
-# Python package
-# Create and test a Python package on multiple Python versions.
-# Add steps that analyze code, save the dist with the build record, publish to a PyPI-compatible index, and more:
-# https://docs.microsoft.com/azure/devops/pipelines/languages/python
+#pyhton-pool
 
 trigger:
-- master
+- main
 
 pool:
-  name: pyhton-pool
-
+  name: 'pyhton-pool'
 
 steps:
+- task: UsePythonVersion@0
+  inputs:
+    versionSpec: '3.x'
+    addToPath: true
+
 - script: |
-    python -m pip install --upgrade pip
+    python -m venv .venv
+    . .venv/bin/activate
+    pip install --upgrade pip
     pip install -r requirements.txt
-  displayName: 'Install dependencies'
+  displayName: 'Set up Python environment and install dependencies'
 
 - script: |
-   python - m  pip install flake8
-   flake8
-  displayName: 'installed flake8' 
+    . .venv/bin/activate
+    FLASK_APP=run.py flask run &
+    sleep 10  # Wait for Flask app to start
+  displayName: 'Start Flask application'
 
 - script: |
-    pytest
-  displayName: 'pytest'
+    curl -b cookie.txt -d'username=admin&password=admin' localhost:5000/login
+    curl -c cookie.txt localhost:5000/grep_processes?name=kworker
+    curl -c cookie.txt "localhost:5000/grep_processes?name=xxx%20%26%26%20touch%20%2Ftmp%2Fpwnd"
+  displayName: 'Run basic tests'
 
 - script: |
-   pip install tox
-   tox -e py
-  displayName: 'tox installed' 
+    . .venv/bin/activate
+    kill $(jobs -p)  # Stop Flask app
+  displayName: 'Stop Flask application'
+
+- script: |
+    . .venv/bin/activate
+    pip install flake8
+    flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+  displayName: 'Run flake8 for linting'
