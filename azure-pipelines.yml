@@ -27,5 +27,12 @@ stages:
               python3.9 -m venv .venv
               . .venv/bin/activate
               pip install -r requirements.txt
-              FLASK_APP=run.py flask run
            displayName: 'Set up virtual environment and run Flask app'
+          
+         - script: |
+             flake8
+           displayName: 'flake8 finished'
+
+         - script: |
+              pytest
+           displayName: 'pytest'
