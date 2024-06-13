@@ -30,6 +30,7 @@ stages:
            displayName: 'Set up virtual environment and run Flask app'
           
          - script: |
+             pip install flake8
              flake8 .
            displayName: 'flake8 finished'
 
